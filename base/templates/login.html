@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+  </head>
+  <body>
+    UserName:<input id="username" /> Password:<input id="password" />
+    <button onclick="login()">Login</button>
+    <button onclick="getProducts()">Get the products</button>
+    <script>
+      const SERVER = "http://127.0.0.1:8000/";
+      let myToken = "";
+
+
+      const login = () => {
+        axios
+          .post(SERVER + "token/", {
+            username: username.value,
+            password: password.value,
+          })
+          .then((res) => (myToken = res.data.access));
+      };
+
+
+      const getProducts = async () => {
+        let response = await axios.get(SERVER + "allmyproducts", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + myToken,
+          },
+        });
+        console.log(response.data);
+      };
+    </script>
+  </body>
+</html>
